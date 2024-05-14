@@ -72,6 +72,81 @@ ALTER SEQUENCE public.books_id_seq OWNED BY public.books.id;
 
 
 --
+-- Name: checkouts; Type: TABLE; Schema: public; Owner: sylvain.ni
+--
+
+CREATE TABLE public.checkouts (
+    id integer NOT NULL,
+    user_id integer NOT NULL,
+    book_id integer NOT NULL,
+    checkout_date timestamp without time zone,
+    return_date timestamp without time zone
+);
+
+
+ALTER TABLE public.checkouts OWNER TO "sylvain.ni";
+
+--
+-- Name: checkouts_id_seq; Type: SEQUENCE; Schema: public; Owner: sylvain.ni
+--
+
+CREATE SEQUENCE public.checkouts_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.checkouts_id_seq OWNER TO "sylvain.ni";
+
+--
+-- Name: checkouts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: sylvain.ni
+--
+
+ALTER SEQUENCE public.checkouts_id_seq OWNED BY public.checkouts.id;
+
+
+--
+-- Name: reviews; Type: TABLE; Schema: public; Owner: sylvain.ni
+--
+
+CREATE TABLE public.reviews (
+    id integer NOT NULL,
+    book_id integer NOT NULL,
+    reviewer_name character varying(255),
+    content character varying(255),
+    rating integer,
+    published_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP
+);
+
+
+ALTER TABLE public.reviews OWNER TO "sylvain.ni";
+
+--
+-- Name: reviews_id_seq; Type: SEQUENCE; Schema: public; Owner: sylvain.ni
+--
+
+CREATE SEQUENCE public.reviews_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.reviews_id_seq OWNER TO "sylvain.ni";
+
+--
+-- Name: reviews_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: sylvain.ni
+--
+
+ALTER SEQUENCE public.reviews_id_seq OWNED BY public.reviews.id;
+
+
+--
 -- Name: users; Type: TABLE; Schema: public; Owner: sylvain.ni
 --
 
@@ -116,6 +191,20 @@ ALTER TABLE ONLY public.books ALTER COLUMN id SET DEFAULT nextval('public.books_
 
 
 --
+-- Name: checkouts id; Type: DEFAULT; Schema: public; Owner: sylvain.ni
+--
+
+ALTER TABLE ONLY public.checkouts ALTER COLUMN id SET DEFAULT nextval('public.checkouts_id_seq'::regclass);
+
+
+--
+-- Name: reviews id; Type: DEFAULT; Schema: public; Owner: sylvain.ni
+--
+
+ALTER TABLE ONLY public.reviews ALTER COLUMN id SET DEFAULT nextval('public.reviews_id_seq'::regclass);
+
+
+--
 -- Name: users id; Type: DEFAULT; Schema: public; Owner: sylvain.ni
 --
 
@@ -138,6 +227,32 @@ COPY public.addresses (user_id, street, city, state) FROM stdin;
 --
 
 COPY public.books (id, title, author, published_date, isbn) FROM stdin;
+1	My First SQL Book	Mary Parker	2012-02-22 12:08:17.320053	981483029127
+2	My Second SQL Book	John Mayer	1972-07-03 09:22:45.050088	857300923713
+3	My Third SQL Book	Cary Flint	2015-10-18 14:05:44.547516	523120967812
+\.
+
+
+--
+-- Data for Name: checkouts; Type: TABLE DATA; Schema: public; Owner: sylvain.ni
+--
+
+COPY public.checkouts (id, user_id, book_id, checkout_date, return_date) FROM stdin;
+1	1	1	2017-10-15 14:43:18.095143	\N
+2	1	2	2017-10-05 16:22:44.593188	2017-10-13 13:00:12.673382
+3	2	2	2017-10-15 11:11:24.994973	2017-10-22 17:47:10.407569
+4	5	3	2017-10-15 09:27:07.215217	\N
+\.
+
+
+--
+-- Data for Name: reviews; Type: TABLE DATA; Schema: public; Owner: sylvain.ni
+--
+
+COPY public.reviews (id, book_id, reviewer_name, content, rating, published_date) FROM stdin;
+1	1	John Smith	My first review	4	2017-12-10 05:50:11.127281
+2	2	John Smith	My second review	5	2017-10-13 15:05:12.673382
+3	2	Alice Walker	Another review	1	2017-10-22 23:47:10.407569
 \.
 
 
@@ -158,6 +273,20 @@ COPY public.users (id, full_name, enabled, last_login) FROM stdin;
 --
 
 SELECT pg_catalog.setval('public.books_id_seq', 1, false);
+
+
+--
+-- Name: checkouts_id_seq; Type: SEQUENCE SET; Schema: public; Owner: sylvain.ni
+--
+
+SELECT pg_catalog.setval('public.checkouts_id_seq', 1, false);
+
+
+--
+-- Name: reviews_id_seq; Type: SEQUENCE SET; Schema: public; Owner: sylvain.ni
+--
+
+SELECT pg_catalog.setval('public.reviews_id_seq', 1, false);
 
 
 --
@@ -192,6 +321,22 @@ ALTER TABLE ONLY public.books
 
 
 --
+-- Name: checkouts checkouts_pkey; Type: CONSTRAINT; Schema: public; Owner: sylvain.ni
+--
+
+ALTER TABLE ONLY public.checkouts
+    ADD CONSTRAINT checkouts_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: reviews reviews_pkey; Type: CONSTRAINT; Schema: public; Owner: sylvain.ni
+--
+
+ALTER TABLE ONLY public.reviews
+    ADD CONSTRAINT reviews_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: users users_id_key; Type: CONSTRAINT; Schema: public; Owner: sylvain.ni
 --
 
@@ -205,6 +350,30 @@ ALTER TABLE ONLY public.users
 
 ALTER TABLE ONLY public.addresses
     ADD CONSTRAINT addresses_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id) ON DELETE CASCADE;
+
+
+--
+-- Name: checkouts checkouts_book_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: sylvain.ni
+--
+
+ALTER TABLE ONLY public.checkouts
+    ADD CONSTRAINT checkouts_book_id_fkey FOREIGN KEY (book_id) REFERENCES public.books(id) ON DELETE CASCADE;
+
+
+--
+-- Name: checkouts checkouts_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: sylvain.ni
+--
+
+ALTER TABLE ONLY public.checkouts
+    ADD CONSTRAINT checkouts_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id) ON DELETE CASCADE;
+
+
+--
+-- Name: reviews reviews_book_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: sylvain.ni
+--
+
+ALTER TABLE ONLY public.reviews
+    ADD CONSTRAINT reviews_book_id_fkey FOREIGN KEY (book_id) REFERENCES public.books(id) ON DELETE CASCADE;
 
 
 --

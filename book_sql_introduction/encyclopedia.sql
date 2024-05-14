@@ -290,10 +290,10 @@ COPY public.continents (id, continent_name) FROM stdin;
 --
 
 COPY public.countries (id, name, capital, population, continent_id) FROM stdin;
-2	USA	Washington D.C.	325365189	\N
-4	Japan	Tokyo	126672000	\N
-1	France	Paris	67158000	\N
-3	Germany	Berlin	82349400	\N
+1	France	Paris	67158000	3
+3	Germany	Berlin	82349400	3
+4	Japan	Tokyo	126672000	2
+2	USA	Washington D.C.	325365189	4
 \.
 
 
