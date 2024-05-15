@@ -245,3 +245,52 @@ ALTER TABLE orders
 
 ALTER TABLE orders DROP COLUMN order_total;
 ```
+---
+
+## ADD DATA WITH INSERT
+
+Insertion Statement Syntax
+```sql
+INSERT INTO table_name
+            (column1_name, column2_name,...)
+     VALUES (data_for_column1, data_for_column2, ...);
+```
+
+Adding Multiple Rows
+```sql
+INSERT INTO users (full_name)
+           VALUES ('Jane Smith'), ('Harry Potter');
+```
+
+Check constraints:
+Check constraints limit the type of data that can be included in a column based on some condition we set in the constraint. Each time a new record is in the process of being added to a table, that constraint is first checked to ensure that data being added conforms to it.
+```sql
+ALTER TABLE users ADD CHECK (full_name <> '');
+```
+![alt text](image-1.png)
+
+EXERCISES:
+```sql
+INSERT INTO countries (name, capital, population)
+  VALUES ('France', 'Paris', 67158000);
+
+INSERT INTO countries (name, capital, population)
+  VALUES
+    ('USA', 'Washington D.C.', 325365189),
+    ('Germany', 'Berlin', 82349400),
+    ('Japan', 'Tokyo', 126672000);
+
+INSERT INTO celebrities (first_name, last_name, occupation, date_of_birth, deceased)
+              VALUES ('Bruce', 'Springsteen', 'Singer, Songwriter', '1949-09-23', false);
+
+INSERT INTO celebrities (first_name, last_name, occupation, date_of_birth)
+                 VALUES ('Scarlett', 'Johansson', 'Actress', '1984-11-22');
+
+INSERT INTO celebrities (first_name, last_name, occupation, date_of_birth, deceased)
+                VALUES ('Frank', 'Sinatra', 'Singer, Actor', '1915-12-12', true),
+                       ('Tom', 'Cruise', 'Actor', '1962-07-03', DEFAULT);
+
+ALTER TABLE celebrities
+  ALTER COLUMN last_name DROP NOT NULL; -- removes the NOT NULL constraint
+
+```
