@@ -1,1 +1,0 @@
-SELECT * FROM parts WHERE part_number::varchar LIKE '3%';
